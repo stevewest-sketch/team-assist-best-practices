@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Layer 2 — The prompt library</title>
+<style>
+  :root{
+    --black:#0D0D0D;
+    --gray3:#4A4A4A;
+    --gray2:#AAAAAA;
+    --gray1:#F3F3F3;
+    --green:#009B00;
+    --green-tint:#CDEFCD;
+    --white:#FFFFFF;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--white);
+    font-family:"Helvetica Neue", Arial, sans-serif;
+    color:var(--black);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:64px 32px 96px;}
+
+  /* header */
+  .eyebrow{
+    display:flex;align-items:center;gap:8px;
+    color:var(--green);
+    font-size:12px;font-weight:700;letter-spacing:1.2px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:8px;height:8px;border-radius:50%;
+    background:var(--green);display:inline-block;
+  }
+  h1{
+    font-size:42px;line-height:1.12;font-weight:700;
+    letter-spacing:-0.5px;margin:0 0 18px;max-width:820px;
+  }
+  .lede{
+    font-size:17px;line-height:1.6;color:var(--gray3);
+    max-width:700px;margin:0 0 28px;
+  }
+  .rule{
+    display:block;
+    color:var(--black);font-weight:700;
+  }
+
+  /* callout */
+  .callout{
+    background:var(--green-tint);
+    border-radius:8px;
+    padding:24px 28px;
+    font-size:15px;line-height:1.6;color:var(--black);
+    margin-bottom:56px;
+    max-width:920px;
+  }
+  .callout b{font-weight:700;}
+
+  /* section grid */
+  .groups{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0 56px;
+  }
+  .group{margin-bottom:48px;}
+  .group-head{
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:18px;
+    padding-bottom:10px;
+    border-bottom:2px solid var(--black);
+  }
+  .group-head .icon{
+    width:22px;height:22px;border-radius:5px;
+    background:var(--green-tint);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;color:var(--green);flex:none;
+  }
+  .group-head h2{
+    font-size:16px;font-weight:700;margin:0;letter-spacing:0.2px;
+  }
+
+  .prompt{
+    border-left:3px solid var(--green);
+    background:var(--gray1);
+    border-radius:0 6px 6px 0;
+    padding:12px 16px;
+    margin-bottom:8px;
+  }
+  .prompt code{
+    display:block;
+    font-family:"SF Mono","Menlo",monospace;
+    font-size:12.5px;line-height:1.55;
+    color:var(--black);
+    white-space:pre-wrap;
+  }
+  .prompt code .var{
+    color:var(--green);font-weight:700;
+  }
+  .result{
+    font-size:12.5px;color:var(--gray3);
+    margin:6px 0 18px 3px;
+    line-height:1.4;
+  }
+
+  /* note box */
+  .note{
+    background:var(--gray1);
+    border-radius:8px;
+    padding:22px 26px;
+    font-size:14px;line-height:1.6;color:var(--black);
+    margin-top:8px;
+  }
+  .note b{font-weight:700;}
+  .note code{
+    font-family:"SF Mono","Menlo",monospace;
+    background:var(--white);
+    border:1px solid var(--gray2);
+    border-radius:4px;
+    padding:1px 6px;
+    font-size:12.5px;
+  }
+
+  /* footer band */
+  .band{
+    background:var(--black);
+    color:var(--white);
+    margin:80px -32px -96px;
+    padding:72px 32px 88px;
+  }
+  .band .inner{max-width:1180px;margin:0 auto;}
+  .band .eyebrow{color:var(--green);}
+  .band .eyebrow::before{background:var(--green);}
+  .band h1{color:var(--white);max-width:760px;}
+  .band .lede{color:var(--gray2);max-width:680px;}
+
+  @media (max-width:820px){
+    .groups{grid-template-columns:1fr;}
+    h1{font-size:30px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="eyebrow">LAYER 2 — THE PROMPT LIBRARY</div>
+  <h1>The exact prompts to type, and what each returns.</h1>
+  <p class="lede">
+    Type each one start to finish and fill in the bracketed part. The trick is to be specific — name the scope, the exact dimensions you want, and the length. Team Assist pulls a lot of context, and telling it how to distill is what turns a data dump into something you can use.
+  </p>
+
+  <div class="callout">
+    <b>Pull broad, but always distill.</b> When you ask for a customer's full history, say what to extract — common contact reasons, what they like and don't like, typical sentiment — and how long — three takeaways, or two to three sentences. Without that, a big pull comes back as a wall of text.
+  </div>
+
+  <div class="groups">
+
+    <!-- Summarizing -->
+    <div class="group">
+      <div class="group-head"><div class="icon">▤</div><h2>Summarizing</h2></div>
+
+      <div class="prompt"><code>Summarize this customer's history, but only include what's related to <span class="var">[topic]</span>.</code></div>
+      <div class="result">History filtered to that one topic.</div>
+
+      <div class="prompt"><code>Catch me up on this customer's conversations from the last <span class="var">[30]</span> days.</code></div>
+      <div class="result">A window wider than this thread, narrower than the full history.</div>
+
+      <div class="prompt"><code>What has changed with this customer since our last conversation?</code></div>
+      <div class="result">A delta from the last contact, not a full re-summary.</div>
+
+      <div class="prompt"><code>What's the customer's most recent message, and is everything earlier in this conversation still relevant to it?</code></div>
+      <div class="result">An answer anchored to the latest message.</div>
+
+      <div class="prompt"><code>Summarize this entire conversation in detail. Don't skip or shorten any part of it.</code></div>
+      <div class="result">A complete pass, for when a summary came back thin.</div>
+
+      <div class="prompt"><code>Show me only the order history relevant to what the customer is asking about right now.</code></div>
+      <div class="result">Order and account history filtered to the live question.</div>
+    </div>
+
+    <!-- Drafting & refining -->
+    <div class="group">
+      <div class="group-head"><div class="icon">✎</div><h2>Drafting &amp; refining</h2></div>
+
+      <div class="prompt"><code>Draft a reply from the answer above.</code></div>
+      <div class="result">A draft grounded only in what was just confirmed.</div>
+
+      <div class="prompt"><code>Draft a reply that covers both what we found on <span class="var">[topic A]</span> and <span class="var">[topic B]</span>.</code></div>
+      <div class="result">One draft built from more than one answer, with a Use button.</div>
+
+      <div class="prompt"><code>Make this reply chat-ready — shorter and more casual.</code></div>
+      <div class="result">A version reshaped for chat.</div>
+
+      <div class="prompt"><code>Make this reply email-ready — fuller and more structured.</code></div>
+      <div class="result">A version reshaped for email.</div>
+
+      <div class="prompt"><code>Make this reply shorter.</code></div>
+      <div class="result">One targeted revision.</div>
+
+      <div class="prompt"><code>Make this reply warmer.</code></div>
+      <div class="result">One targeted revision.</div>
+
+      <div class="prompt"><code>Make this reply more formal.</code></div>
+      <div class="result">One targeted revision.</div>
+
+      <div class="prompt"><code>Add a line that <span class="var">[specific thing]</span>, and keep the rest of the reply exactly as it is.</code></div>
+      <div class="result">A targeted edit instead of a full redraft.</div>
+
+      <div class="prompt"><code>Use the tone from the first one, but make it shorter.</code></div>
+      <div class="result">A refined pick instead of a new request.</div>
+    </div>
+
+    <!-- Finding & synthesizing -->
+    <div class="group">
+      <div class="group-head"><div class="icon">⌕</div><h2>Finding &amp; synthesizing an answer</h2></div>
+
+      <div class="prompt"><code>What's our policy on <span class="var">[specific issue]</span> for <span class="var">[specific situation]</span>?</code></div>
+      <div class="result">A short, scoped answer with a citation.</div>
+
+      <div class="prompt"><code>What does our policy say specifically about <span class="var">[detail]</span>?</code></div>
+      <div class="result">A narrower answer than a broad policy question returns.</div>
+
+      <div class="prompt"><code>Summarize what we've confirmed about <span class="var">[specific issue]</span> only, in two to three sentences.</code></div>
+      <div class="result">A short recap of that issue, not the full history.</div>
+
+      <div class="prompt"><code>Search the knowledge base for everything relevant to what the customer is asking, and give me one answer that covers all of it.</code></div>
+      <div class="result">One combined answer when a question has more than one part.</div>
+    </div>
+
+    <!-- Building context -->
+    <div class="group">
+      <div class="group-head"><div class="icon">⧉</div><h2>Building context across a session</h2></div>
+
+      <div class="prompt"><code>Summarize everything we've covered in this session so far into what we actually know about the issue.</code></div>
+      <div class="result">A synthesis across the whole session, not just the last answer.</div>
+
+      <div class="prompt"><code>Summarize this customer's history as exactly three takeaways I need to know before I respond.</code></div>
+      <div class="result">A capped, skimmable version instead of a full writeup.</div>
+
+      <div class="prompt"><code>List the key facts from this conversation as a short bulleted list, no paragraphs.</code></div>
+      <div class="result">A format shift, for when a response came back too dense to scan.</div>
+
+      <div class="prompt"><code>Based on this conversation, what information is still missing or unclear before I respond?</code></div>
+      <div class="result">A gap check before you draft.</div>
+    </div>
+
+    <!-- Checking for a pattern -->
+    <div class="group">
+      <div class="group-head"><div class="icon">◎</div><h2>Checking for a pattern</h2></div>
+
+      <div class="prompt"><code>Is this someone who has repeatedly asked for refunds on different orders based on their history?</code></div>
+      <div class="result">A precise check against the visible history, not a guess.</div>
+
+      <div class="prompt"><code>Does the customer's history show anything similar to the claim they're making right now?</code></div>
+      <div class="result">Whether it matches a prior pattern or stands on its own.</div>
+    </div>
+
+    <!-- Calls & documentation -->
+    <div class="group">
+      <div class="group-head"><div class="icon">☎</div><h2>Calls &amp; documentation</h2></div>
+
+      <div class="prompt"><code>Catch me up on this call.</code></div>
+      <div class="result">A summary of the call so far.</div>
+
+      <div class="prompt"><code>What did the customer say about <span class="var">[topic]</span> earlier in this call?</code></div>
+      <div class="result">A specific moment pulled from the transcript.</div>
+
+      <div class="prompt"><code>Summarize this call as a post-contact note — what the customer needed, what was resolved, and any follow-up required.</code></div>
+      <div class="result">An internal, factual post-contact note.</div>
+
+      <div class="prompt"><code>List every action I took this conversation — what was done, which record it affected, and the outcome.</code></div>
+      <div class="result">An internal action log, final state only.</div>
+    </div>
+
+    <!-- Order & account -->
+    <div class="group">
+      <div class="group-head"><div class="icon">▦</div><h2>Order &amp; account</h2></div>
+
+      <div class="prompt"><code>What's the status of this order?</code></div>
+      <div class="result">A short status line, when a specific order was named.</div>
+
+      <div class="prompt"><code>What's the status of this customer's most recent order?</code></div>
+      <div class="result">A short status line, when no order was named.</div>
+
+      <div class="prompt"><code>Are there any flags on this order I should know about?</code></div>
+      <div class="result">Delay, return, or refund flags only.</div>
+    </div>
+
+    <!-- Translation -->
+    <div class="group">
+      <div class="group-head"><div class="icon">⊕</div><h2>Translation</h2></div>
+
+      <div class="prompt"><code>Translate the customer's most recent message into English.</code></div>
+      <div class="result">A translation of what they sent, for you to read.</div>
+
+      <div class="prompt"><code>Translate my reply into <span class="var">[language]</span> before I send it.</code></div>
+      <div class="result">A translation of your draft, ready to send.</div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <b>When two answers come back.</b> If Team Assist returns more than one answer with no way to insert either, don't copy-paste them. Type <code>Draft a reply that covers both of those answers.</code> The draft, and the Use button, appear once you ask for one.
+  </div>
+
+</div>
+
+<div class="band">
+  <div class="inner">
+    <div class="eyebrow">LAYER 3 — THE PLAYS</div>
+    <h1>Press a button, then work from its output.</h1>
+    <p class="lede">
+      Every play starts by pressing a button, then moves into the sharper prompts as the situation needs them. Select a play to see the button that opens it, the exact prompts to type, and how to build on what each step returns.
+    </p>
+  </div>
+</div>
+
+</body>
+</html>
